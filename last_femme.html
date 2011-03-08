@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>I-C-Music</title>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="last_femme.ico" type="image/x-icon">
+		<style>
+			.group:after {
+				content: ".";
+				display: block;
+				height: 0;
+				clear: both;
+				visibility: hidden;
+			}
+			body {
+				padding:0;
+			}
+			h1 {
+				color:#333;
+				font-family:Georgia, "Times New Roman";
+				font-size:56px;
+				margin:0;
+				padding:0;
+			}
+			h2, label, p {
+				color:#333;
+				font-family:"Trebuchet MS",segoe,arial,helvetica;
+				font-size:26px;
+				font-weight:100;
+				margin:0;
+				padding:0;
+			}
+			input {
+				font-size:18px;
+				font-family:"Trebuchet MS",segoe,arial,helvetica;
+			}
+			ul {
+				list-style:none;
+			}
+			li {
+				color:#333;
+				float:left;
+				font-family:"Trebuchet MS",segoe,arial,helvetica;
+				font-size:16px;	
+				width:auto;
+			}
+			#result {
+				margin-top:40px;
+				position:relative;
+			}
+			label, input {
+				font-size:18px;
+			}
+			p  {
+				border-top:1px solid #ccc;
+				font-size:16px;	
+			}
+			p img {
+				position:relative;
+				top:6px;
+			}
+			p a {
+				color:#333;
+			}
+			a img {
+				border:none;
+			}
+			#icon {
+				float:left;
+				margin-bottom:15px;
+				margin-right:15px;
+				width:149px;
+			}
+			#footer {
+				margin-top:50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div class="group">
+				<img id="icon" src="last_femme_icon.png">
+				<h1 id="header">I-C-Music!</h1>
+				<h2>Fan pics of artists and groups</h2>
+			</div>
+			<form method="get" action="last_femme_suggest.php" id="last_femme">
+				<label for="artist">Artist/group:</label>
+				<input type="search" placeholder="Artist name" name="artist" id="artist">
+				<input type="submit" name="submit" value="Show me images!">
+				<br>
+				<br>
+				<label for="medium">Medium</label>
+				<input type="radio" name="size" checked="checked" value="2" id="medium">
+				<label for="original">Original</label>
+				<input type="radio" name="size" value="0" id="original">
+			</form>
+			<div id="result" class="group">
+				<!--Image place holder-->
+			</div>
+			 <div id="galleria"></div>
+			<div id="footer">
+				<p>Website built by <a href="http://hopjakk.se">hopjåkk</a> 2010. Content delivered via the awesome <a href="http://last.fm"><img src="lastfm_red_small.gif" width="80" height="28" alt="Last.fm"></a> API.</p>
+			</div>
+		</div>
+		<script src="http://www.google.com/jsapi?key=INSERT_YOUR_KEY"></script>
+		<script>
+		    google.load("jquery", "1.4.2");
+		</script>
+		<script src="jquery.masonry.and.modernizr-1.1min.js"></script>
+		<script>
+			$(document).ready( function(){
+				//Post query and load images from Last.fm
+				$("#last_femme").live( "submit", function(){
+					var artist = $("#artist").val();
+					var size = $("input[type=radio]:checked").val();
+					var url = "last_femme_suggest.php";
+					var html;
+					//console.log(data);
+					$.ajax({
+						type: 'GET',
+						url: url,
+						data: "artist=" + artist + "&size=" + size,
+						success: function(html){
+							$("#result").html(html).masonry({
+							    columnWidth: 150, 
+							    itemSelector: 'li'
+							});
+							$('#galleria').galleria({
+						        data_source: '#result',
+						        keep_source: true,
+						        thumbnails: false,
+						        data_config: function(img) {
+						            return {
+						                description: $(img).next('.caption').html()
+						            }
+						        }
+						    });
+						}
+					});
+					return false;
+				});
+				// Load theme
+			    Galleria.loadTheme('galleria.lightbox.js');
+			});
+		</script>
+	</body>
+</html>

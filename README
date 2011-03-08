@@ -1,0 +1,11 @@
+Speedy Last.fm image fetcher
+===
+Using jQuery, Masonry and Galleria.
+
+Prerequisites:
+* Last.fm API-key
+* Google JS API-key
+
+Google key goes into last_femme.html and the Last.fm key goes into last_femme_suggest.php
+
+And a database if you want to keep statistics.
